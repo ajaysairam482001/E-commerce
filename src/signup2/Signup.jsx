@@ -28,7 +28,7 @@ const Signup = () =>{
         // console.log(user);
 
        
-        localStorage.setItem('userData',JSON.stringify(user));
+        //localStorage.setItem('userData',JSON.stringify(user));
 
         const handleInputChange = (e)=>{
             //console.log(e.target)
@@ -44,6 +44,11 @@ const Signup = () =>{
                 seterror({
                     ...error,RePass:'Password does not match'
                 });
+                alert('password does not match');
+                return false;
+            }
+            if(formData.Email===''||formData.Password===''){
+                alert("Fill the remaining fields")
                 return false;
             }
             seterror({
@@ -61,7 +66,7 @@ const Signup = () =>{
             console.log("handlesubmit invoked");
 
             if(!validate()){
-                alert('password does not match');
+                // alert('password does not match');
                 return;
             }
 
@@ -169,7 +174,7 @@ const Signup = () =>{
                     value={formData.RePass}
                     onChange={handleInputChange}
                 />
-                {error.RePass && <p>{error.RePass}</p>}
+                <div style={{color:'red'}}>{error.RePass && <p>{error.RePass}</p>}</div>
             </div>
 
             <div id="inputdivsp">
@@ -224,6 +229,6 @@ const Signup = () =>{
 </div>
 </>
 
-    </>
+</>
 }
 export default Signup;

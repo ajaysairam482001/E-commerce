@@ -1,10 +1,54 @@
 import React, { useState } from "react";
-import Signup from "../signup/Signup";
 import styles from "./login.css"
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
+//passwords were not hashed make them secure soon (both login and signup)
 
 const Login = ()=>{
-    
+    const user = JSON.parse(localStorage.getItem('userData')) || [];
+
+    const [formData,setformData] = useState({
+      Email:'',
+      Password:''
+    });
+
+    const navigate = useNavigate();
+
+    const handleInputChange = (e)=>{
+      const {name,value} = e.target; 
+      setformData({
+        ...formData,[name]:value,
+    });
+    }
+
+    const handlelogin = ()=>{
+      if(formData.Email==='' || formData.Password===''){
+        alert("Email OR Password were not entered")
+        return;
+      }
+      if(user.some((user)=>user.Email === formData.Email)){
+
+        const founduser = user.find((u)=>u.Email === formData.Email);
+        console.log(founduser);
+
+        if(founduser){
+          if(founduser.Password === formData.Password){
+            //console.log("pass match!");
+            navigate('/home');
+          }
+          else{
+            //console.log("not matched");
+            alert("Incorrect Password");
+          }
+        }
+
+      }
+      else{
+        //console.log("Not Found");
+        alert("Email does not Exists");
+        setformData({Email:''});
+      }
+    };
 
     return <>
     <meta charSet="utf-8" />
@@ -36,8 +80,10 @@ const Login = ()=>{
             </label>
             <input
               type="email"
+              name="Email"
               className="form-control border-2"
-              id="exampleFormControlInput1"
+              id="Email"
+              onChange={handleInputChange}
             />
           </div>
           <div className="m-4 input">
@@ -46,13 +92,15 @@ const Login = ()=>{
             </label>
             <input
               type="password"
+              name="Password"
               className="form-control border-2"
-              id="exampleFormControlInput2"
+              id="Password"
+              onChange={handleInputChange}
             />
           </div>
-          <a href="homeList2.html" className="btn btn-primary">
+          <button className="btn btn-primary" onClick={handlelogin}>
             LOG-IN
-          </a>
+          </button>
           <Link to='/signup'  className="btn btn-primary">SIGN-UP</Link>
         </div>
         <div className="col-lg-3"/>
