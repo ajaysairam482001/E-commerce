@@ -3,6 +3,7 @@ import styles from "./signup2.css"
 import { Link, json } from "react-router-dom";
 
 const Signup = () =>{
+    
         const [formData,setformData] = useState({
             Email:'',
             Password:'',
