@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState,useEffect,useRef } from "react";
 import styles from "./signup2.css"
-import { Link, json } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Signup = () =>{
     
@@ -18,14 +18,17 @@ const Signup = () =>{
             RePass:'',
         });
 
+        const navigate = useNavigate();
+
         const [user,setuser] = useState(()=>{
             const storedItem = localStorage.getItem('userData');
             return storedItem ? JSON.parse(storedItem):[];
         });
 
-        localStorage.setItem('userData',JSON.stringify(user));
         // console.log(user);
 
+       
+        localStorage.setItem('userData',JSON.stringify(user));
 
         const handleInputChange = (e)=>{
             //console.log(e.target)
@@ -55,6 +58,7 @@ const Signup = () =>{
 
         const handleSubmit = (e)=>{
             e.preventDefault();
+            console.log("handlesubmit invoked");
 
             if(!validate()){
                 alert('password does not match');
@@ -66,18 +70,13 @@ const Signup = () =>{
                     ...error,Email:'email Already exists'
                 });
                 alert('Email Already Exists');
-                // setformData({
-                //     Email:'',
-                //     Password: '',
-                //     RePass: '',
-                //     MobileNumber: '',
-                //     Location: '',
-                // })
                 return;
             }
 
             const newUser = {...formData};
             setuser(prevUser=>[...prevUser,newUser]);
+            localStorage.setItem('userData',JSON.stringify([...user,newUser]));
+            
 
             setformData({
                 Email: '',
@@ -92,11 +91,9 @@ const Signup = () =>{
                 Password: '',
                 RePass: ''
             });
-
-            // console.log(formData);
-            // console.log(newUser);
-            // console.log(user);
-
+            
+            navigate('/login');
+            
         }
     
         
@@ -209,12 +206,13 @@ const Signup = () =>{
             </div>
             <div id="buttondivsp">
                 {/* <button id="buttonsp">Submit</button> */}
-                <Link  
+                <button  
                 className=" buttonsp btn btn-primary" 
                 style={{margin:'10px'}}
-                onClick={handleSubmit}>
-                    Submit
-                </Link>
+                onClick={handleSubmit}
+                >
+                Submit
+                </button>
             </div>
         </div>
         <div className="middlerightsp" />
